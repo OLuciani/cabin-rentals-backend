@@ -3,8 +3,17 @@ import dotenv from "dotenv";
 import connectDB from "@config/database"; // Conexión a MongoDB
 import errorHandler from "./middlewares/errorHandler";
 import cors from "cors";
+import cookieParser from 'cookie-parser';
+
 import exampleRoutes from "./routes/example.routes";
 import usersRoutes from './routes/usersRoutes';
+import authRoutes from './routes/authRoutes'
+import cabinRoutes from "./routes/cabinRoutes";
+import bookingRoutes from "./routes/bookingRoutes";
+
+
+
+
 
 
 dotenv.config(); // Carga variables de entorno
@@ -14,6 +23,7 @@ const app = express();
 
 // Middlewares básicos
 app.use(express.json());  // Middleware para JSON
+app.use(cookieParser());  // Necesario para leer cookies
 
 // Configuración personalizada de CORS
 // Configurar CORS para permitir solicitudes desde el frontend
@@ -36,7 +46,10 @@ app.get("/error-prueba", async (req, res) => {
 });
 
 app.use("/api", exampleRoutes);
-app.use('/api/users', usersRoutes);
+app.use("/api/users", usersRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/cabins", cabinRoutes);
+app.use("/api/bookings", bookingRoutes);
   
 
 // Middleware de manejo de errores (después de todas las rutas)

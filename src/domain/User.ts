@@ -14,6 +14,7 @@ export interface IUser extends Document {
   invitedBy?: mongoose.Types.ObjectId | null; // Referencia opcional al usuario que lo invitó
   createdAt: Date;                     // Fecha de creación (automática)
   updatedAt: Date;                     // Fecha de última actualización (automática)
+  firebaseUid: string;                 // Identificador único del usuario en Firebase, utilizado para autenticación
 }
 
 // Creamos el esquema de Mongoose para definir cómo se guardan los usuarios en MongoDB
@@ -38,7 +39,7 @@ const userSchema: Schema<IUser> = new Schema(
       },
     role: {
       type: String,
-      enum: ['admin', 'assistant', 'employee', 'client'], // Solo se permiten estos valores
+      enum: ['generalAdmin', 'admin', 'limitedAdmin', 'employee', 'client'], // Solo se permiten estos valores
       default: 'client', // Por defecto, el usuario tiene el rol "client"
     },
     invitedBy: {
@@ -46,6 +47,12 @@ const userSchema: Schema<IUser> = new Schema(
       ref: 'User', // Referencia a otro documento del modelo User
       default: null,
     },
+    firebaseUid: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    
   },
   {
     timestamps: true, // Agrega automáticamente createdAt y updatedAt
