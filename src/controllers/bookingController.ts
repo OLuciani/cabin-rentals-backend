@@ -12,7 +12,10 @@ export const createBookingController = async (req: Request, res: Response) => {
   try {
     const bookingData = req.body;
     const newBooking = await createBookingUseCase(bookingData);
-    res.status(201).json(newBooking);
+    res.status(201).json({
+      success: true,
+      confirmationCode: newBooking.confirmationCode, // Devuelves solo lo necesario
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: (error as Error).message });
