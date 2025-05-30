@@ -6,6 +6,7 @@ export type UserRole = 'admin' | 'assistant' | 'employee' | 'client';
 
 // Interfaz que representa la estructura del documento de un usuario en la base de datos
 export interface IUser extends Document {
+  _id: mongoose.Types.ObjectId;        // ID único del usuario (generado automáticamente)
   email: string;                        // Correo electrónico del usuario (único)
   passwordHash: string;                // Contraseña en formato hash
   name: string;                        // Apellido del usuario

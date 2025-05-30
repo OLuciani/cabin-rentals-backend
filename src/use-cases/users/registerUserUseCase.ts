@@ -1,78 +1,9 @@
 // Lógica del caso de uso: registrar un nuevo usuario
-
-/* import User from '../domain/User';
+// este archivo es el original que no usaba repositorio p/conectarse con MongoDB
+/* import User from '../../domain/User';
 import bcrypt from 'bcryptjs';
 import { getAuth } from 'firebase-admin/auth';
-
-interface RegisterData {
-  name: string;
-  lastName: string;
-  email: string;
-  password: string;
-  role?: string;
-}
-
-export const registerUserUseCase = async (data: RegisterData) => {
-  const { name, lastName, email, password, role } = data;
-
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    throw new Error('Ya existe un usuario con ese email');
-  }
-
-  const passwordHash = await bcrypt.hash(password, 10);
-
-  const newUser = new User({
-    name,
-    lastName,
-    email,
-    passwordHash,
-    role,
-  });
-
-  await newUser.save();
-
-  try {
-    // Crear el usuario en Firebase Auth
-    await getAuth().createUser({
-      email,
-      password,
-      displayName: `${name} ${lastName}`,
-    });
-  } catch (error) {
-    // Si falla Firebase, eliminar el usuario recién creado en MongoDB
-    await User.findByIdAndDelete(newUser._id);
-    console.error('Error al crear el usuario en Firebase:', error);
-    throw new Error('Ocurrió un error al registrar el usuario');
-  }
-
-  return {
-    message: 'Usuario registrado correctamente',
-    user: {
-      id: newUser._id,
-      email: newUser.email,
-      name: newUser.name,
-      lastName: newUser.lastName,
-      role: newUser.role,
-    },
-  };
-}; */
-    
-
-
-// Lógica del caso de uso: registrar un nuevo usuario
-
-import User from '../../domain/User';
-import bcrypt from 'bcryptjs';
-import { getAuth } from 'firebase-admin/auth';
-
-interface RegisterData {
-  name: string;
-  lastName: string;
-  email: string;
-  password: string;
-  role?: string;
-}
+import { RegisterData } from '../../types/user/user.types';
 
 export const registerUserUseCase = async (data: RegisterData) => {
   const { name, lastName, email, password, role } = data;
@@ -127,6 +58,79 @@ export const registerUserUseCase = async (data: RegisterData) => {
       name: newUser.name,
       lastName: newUser.lastName,
       role: newUser.role,
+    },
+  };
+}; */
+
+
+
+import bcrypt from 'bcryptjs';
+import { getAuth } from 'firebase-admin/auth';
+import { RegisterData } from '../../types/user/user.types';
+import { UserRepository } from '../../domain/interfaces/UserRepository';
+import { UserEntity } from '../../domain/entities/UserEntity';
+
+export const registerUserUseCase = async (
+  data: RegisterData, // recibe los argumentos de req.body del controller
+  userRepository: UserRepository // 👈 el repositorio se inyecta aquí y usa la interface (como si fuera un tipo de repositorio)
+) => {
+  const { name, lastName, email, password, role } = data;
+
+  // Verificar si ya existe un usuario con ese email
+  const existingUser = await userRepository.findByEmail(email);
+  if (existingUser) {
+    throw new Error('Ya existe un usuario con ese email');
+  }
+
+  // Encriptar la contraseña
+  const passwordHash = await bcrypt.hash(password, 10);
+
+  let firebaseUserId: string;
+
+  try {
+    // Crear el usuario en Firebase Auth
+    const firebaseUser = await getAuth().createUser({
+      email,
+      password,
+      displayName: `${name} ${lastName}`,
+    });
+
+    firebaseUserId = firebaseUser.uid;
+  } catch (error) {
+    console.error('Error al crear el usuario en Firebase:', error);
+    throw new Error('Ocurrió un error al registrar el usuario');
+  }
+
+  // Crear entidad del usuario para guardarlo en Mongo
+  const newUser: UserEntity = {
+    name,
+    lastName,
+    email,
+    passwordHash,
+    role: role ?? 'client', // Si no viene, usa 'client'
+    firebaseUid: firebaseUserId,
+  };
+
+  let savedUser: UserEntity;
+
+  try {
+    savedUser = await userRepository.save(newUser);
+  } catch (error) {
+    // Si falla guardar en MongoDB, eliminar el usuario en Firebase
+    await getAuth().deleteUser(firebaseUserId);
+    console.error('Error al guardar usuario en la base de datos:', error);
+    throw new Error('Error al guardar usuario en la base de datos');
+  }
+
+  return {
+    message: 'Usuario registrado correctamente',
+    user: {
+      id: savedUser.id,
+      firebaseUid: savedUser.firebaseUid,
+      email: savedUser.email,
+      name: savedUser.name,
+      lastName: savedUser.lastName,
+      role: savedUser.role,
     },
   };
 };
