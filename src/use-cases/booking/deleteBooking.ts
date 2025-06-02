@@ -1,4 +1,4 @@
-import Booking from "@domain/Booking";
+import Booking from "../../domain/Booking";
 
 // Función para eliminar una reserva
 export const deleteBooking = async (id: string) => {

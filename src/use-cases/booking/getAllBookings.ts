@@ -1,4 +1,4 @@
-import Booking from "@domain/Booking";
+import Booking from "../../domain/Booking";
 
 // Función para obtener todas las reservas
 export const getAllBookings = async () => {

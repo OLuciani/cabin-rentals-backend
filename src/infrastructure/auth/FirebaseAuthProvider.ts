@@ -1,6 +1,6 @@
 // Proveedor de autenticación (se lo llama AuthProvider, y es el proveedor de autenticacion en este caso de Firebase).
 import axios from 'axios';
-import { AuthProvider } from '@domain/interfaces/AuthProvider';
+import { AuthProvider } from '../../domain/interfaces/AuthProvider';
 import { FirebaseSignupResponse } from '../../types/user/auth.types';
 
 export class FirebaseAuthProvider implements AuthProvider {

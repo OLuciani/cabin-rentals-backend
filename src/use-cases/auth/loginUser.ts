@@ -1,72 +1,8 @@
-// Codigo sin el proveedor de autenticacion de firebae
-/* import { Request, Response } from 'express';
-import axios from 'axios';
-import User from '@domain/User';
-import jwt from 'jsonwebtoken';
-import { FirebaseSignupResponse } from '../../types/user/auth.types';
-
-export default async function loginUser(req: Request, res: Response) {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email y contraseña son requeridos' });
-  }
-
-  try {
-    // 🔐 1. Verificar en Firebase Auth
-    const firebaseResponse = await axios.post<FirebaseSignupResponse>(
-      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.FIREBASE_WEB_API_KEY}`,
-      {
-        email,
-        password,
-        returnSecureToken: true,
-      }
-    );
-
-    const { localId: firebaseUid } = firebaseResponse.data;
-
-    // 🔎 2. Buscar en MongoDB por el uid de Firebase
-    const user = await User.findOne({ firebaseUid });
-    if (!user) {
-      return res.status(404).json({ message: 'Usuario no encontrado en la base de datos' });
-    }
-
-    // 🎟️ 3. Emitir token o cookie
-    const token = jwt.sign(
-      { userId: user._id, role: user.role },
-      process.env.JWT_SECRET as string,
-      { expiresIn: '7d' }
-    //{expiresIn: '3m'}
-    );
-
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
-    res.status(200).json({
-      message: 'Inicio de sesión exitoso',
-      user: {
-        id: user._id,
-        name: user.name,
-        role: user.role,
-      },
-    });
-
-  } catch (error: any) {
-    console.error('Error en login con Firebase:', error.response?.data || error.message);
-    return res.status(401).json({ message: 'Credenciales inválidas' });
-  }
-} */
-
-
-  //Codigo nuevo con proveedor de autenticacion de Firebase
-  // src/use-cases/auth/loginUser.ts
+//Codigo nuevo con proveedor de autenticacion de Firebase
+// src/use-cases/auth/loginUser.ts
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import User from '@domain/User';
+import User from '../../domain/User';
 import { FirebaseAuthProvider } from '../../infrastructure/auth/FirebaseAuthProvider';
 
 export default async function loginUser(req: Request, res: Response, authProvider: FirebaseAuthProvider ) {

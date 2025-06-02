@@ -1,4 +1,4 @@
-import Cabin from "@domain/Cabin";
+import Cabin from "../../domain/Cabin";
 import { CabinFilters } from "../../types/cabin.types";
 
 const getAllCabins = async (filters: CabinFilters) => {

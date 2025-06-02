@@ -1,4 +1,4 @@
-import User from '@domain/User'; // o tu modelo según como lo exportás
+import User from '../../domain/User'; // o tu modelo según como lo exportás
 import { Types } from 'mongoose';
 
 export const getUserProfileUseCase = async (userId: string) => {

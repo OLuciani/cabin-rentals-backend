@@ -1,4 +1,4 @@
-import Booking from "@domain/Booking";
+import Booking from "../../domain/Booking";
 
 // Función para actualizar una reserva
 export const updateBooking = async (id: string, updateData: object) => {

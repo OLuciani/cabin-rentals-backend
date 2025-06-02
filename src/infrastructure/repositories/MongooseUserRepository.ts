@@ -1,6 +1,6 @@
 import { UserRepository } from '../../domain/interfaces/UserRepository';
 import { UserEntity } from '../../domain/entities/UserEntity';
-import UserModel from '@domain/User'; // Tu modelo de Mongoose
+import UserModel from '../../domain/User'; 
 
 export class MongooseUserRepository implements UserRepository {
   async findByEmail(email: string): Promise<UserEntity | null> {

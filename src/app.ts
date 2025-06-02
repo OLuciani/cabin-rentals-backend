@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import connectDB from "@config/database"; // Conexión a MongoDB
+import connectDB from "./config/database"; // Conexión a MongoDB
 import errorHandler from "./middlewares/errorHandler";
 import cors from "cors";
 import cookieParser from 'cookie-parser';

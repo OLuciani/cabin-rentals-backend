@@ -1,4 +1,4 @@
-import Booking from "@domain/Booking";
+import Booking from "../../domain/Booking";
 
 // Función para obtener una reserva por ID
 export const getBookingById = async (id: string) => {

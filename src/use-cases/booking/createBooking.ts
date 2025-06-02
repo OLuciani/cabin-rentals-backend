@@ -1,6 +1,6 @@
-import Booking from "@domain/Booking";
-import Cabin from "@domain/Cabin"; // Asegúrate de importar el modelo Cabin
-import { IBooking } from "@domain/Booking";
+import Booking from "../../domain/Booking";
+import Cabin from "../../domain/Cabin"; // Asegúrate de importar el modelo Cabin
+import { IBooking } from "../../domain/Booking";
 import mongoose from "mongoose";  // Importa mongoose para usar ObjectId
 
 // Función para crear una reserva
