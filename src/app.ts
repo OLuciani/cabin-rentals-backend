@@ -12,10 +12,6 @@ import cabinRoutes from "./routes/cabinRoutes";
 import bookingRoutes from "./routes/bookingRoutes";
 
 
-
-
-
-
 dotenv.config(); // Carga variables de entorno
 connectDB(); // Conecta MongoDB
 
@@ -27,8 +23,14 @@ app.use(cookieParser());  // Necesario para leer cookies
 
 // Configuración personalizada de CORS
 // Configurar CORS para permitir solicitudes desde el frontend
+if (!process.env.FRONTEND_WEB_URL) {
+  throw new Error("La variable FRONTEND_WEB_URL no está definida en el archivo .env");
+}
+const frontend_web_url: string = process.env.FRONTEND_WEB_URL ;
+
 app.use(cors({
-    origin: 'http://localhost:3000', // O '*' para permitir todo (no recomendado en prod)
+    //origin: 'http://localhost:3000', // O '*' para permitir todo (no recomendado en prod)
+    origin: [frontend_web_url, 'http://localhost:3000'], 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true // solo si vas a usar cookies o autenticación más adelante
   }));
