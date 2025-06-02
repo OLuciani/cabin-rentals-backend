@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import Cabin from "../src/domain/Cabin";
-import connectDB from "../src/config/database";
+import Cabin from "../domain/Cabin";
+import connectDB from "../config/database";
 
 dotenv.config();
 
