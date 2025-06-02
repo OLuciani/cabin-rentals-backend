@@ -1,9 +1,9 @@
 {
   "name": "cabin-rentals-backend",
   "version": "1.0.0",
-  "main": "dist/server.js",
+  "main": "dist/app.js",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node dist/app.js",
     "dev": "nodemon",
     "build": "npx tsc",
     "prod": "npm run build && npm start",
