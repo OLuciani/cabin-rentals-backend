@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express'; // RequestHandler es un tipo de TypeScript que viene incluido en los tipos de express, y se utiliza para tipar funciones que van a actuar como middlewares o controladores en Express.
 import { registerUserUseCase } from '../use-cases/users/registerUserUseCase';
-import { MongooseUserRepository } from 'infrastructure/repositories/MongooseUserRepository';
+import { MongooseUserRepository } from '../infrastructure/repositories/MongooseUserRepository';
 import { getUserProfileUseCase } from '../use-cases/users/getUserProfile';
 
 
