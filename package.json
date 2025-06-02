@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "dist/app.js",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "node -r tsconfig-paths/register dist/app.js",
     "dev": "nodemon",
     "build": "npx tsc",
     "watch": "tsc --watch",
