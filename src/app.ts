@@ -10,6 +10,7 @@ import usersRoutes from './routes/usersRoutes';
 import authRoutes from './routes/authRoutes'
 import cabinRoutes from "./routes/cabinRoutes";
 import bookingRoutes from "./routes/bookingRoutes";
+import healthRoutes from "./routes/healthRoutes";
 
 
 dotenv.config(); // Carga variables de entorno
@@ -29,8 +30,8 @@ if (!process.env.FRONTEND_WEB_URL) {
 const frontend_web_url: string = process.env.FRONTEND_WEB_URL ;
 
 app.use(cors({
-    //origin: 'http://localhost:3000', // O '*' para permitir todo (no recomendado en prod)
-    origin: [frontend_web_url, 'http://localhost:3000'], 
+    origin: 'http://localhost:3000', // O '*' para permitir todo (no recomendado en prod)
+    //origin: [frontend_web_url, 'http://localhost:3000'], 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true // solo si vas a usar cookies o autenticación más adelante
   }));
@@ -47,12 +48,13 @@ app.get("/error-prueba", async (req, res) => {
     }
 });
 
+
 app.use("/api", exampleRoutes);
 app.use("/api/users", usersRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/cabins", cabinRoutes);
 app.use("/api/bookings", bookingRoutes);
-  
+app.use("/api", healthRoutes);
 
 // Middleware de manejo de errores (después de todas las rutas)
 app.use(errorHandler);

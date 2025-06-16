@@ -4,6 +4,27 @@ Este es el backend del proyecto **Cabin Rentals**, una aplicación web para la g
 
 ---
 
+## 🌐 Despliegue
+
+El backend ya se encuentra desplegado en producción a través de [Render](https://render.com).
+
+> ⚠️ Este servicio funciona como una API REST, por lo que **no muestra una interfaz visual** al acceder desde el navegador.  
+> Su propósito es brindar soporte al frontend de la aplicación **Cabin Rentals**.
+
+🔗 **URL base (producción)**: [https://cabin-rentals-backend.onrender.com](https://cabin-rentals-backend.onrender.com)
+
+> Además, podés verificar el estado de la API accediendo a la ruta pública:  
+> [https://cabin-rentals-backend.onrender.com/api/health](https://cabin-rentals-backend.onrender.com/api/health)  
+
+---
+
+🛠️ Hosting y disponibilidad
+El backend está desplegado en el plan gratuito de Render, que suspende la aplicación tras 15 minutos de inactividad para ahorrar recursos. Esto puede causar demoras de hasta un minuto en la primera solicitud después de un periodo de inactividad. Para minimizar este efecto, se ha configurado un servicio de monitoreo (como UptimeRobot) que realiza pings periódicos para mantener la API activa.
+
+El frontend está desplegado en el plan gratuito de Vercel, que ofrece despliegue rápido y escalabilidad automática, pero también puede presentar ciertas limitaciones propias de los planes gratuitos, como tiempos de arranque en frío en despliegues muy poco usados.
+
+---
+
 ## 🚀 Tecnologías utilizadas
 
 - **Node.js** - Entorno de ejecución JavaScript
