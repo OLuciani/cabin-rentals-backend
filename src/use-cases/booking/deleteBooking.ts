@@ -1,16 +1,13 @@
-import Booking from "../../domain/Booking";
+import { BookingRepository } from "../../domain/interfaces/BookingRepository";
 
-// Función para eliminar una reserva
-export const deleteBooking = async (id: string) => {
-  try {
-    const deletedBooking = await Booking.findByIdAndDelete(id);
-
-    if (!deletedBooking) {
-      throw new Error("Reserva no encontrada");
-    }
-
-    return deletedBooking;
-  } catch (error) {
-    throw new Error("Error al eliminar la reserva");
+export const deleteBooking = async (
+  id: string,
+  bookingRepo: BookingRepository
+): Promise<void> => {
+  const booking = await bookingRepo.findById(id);
+  if (!booking) {
+    throw new Error("Reserva no encontrada.");
   }
+
+  await bookingRepo.deleteById(id);
 };
