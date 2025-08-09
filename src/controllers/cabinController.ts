@@ -5,6 +5,8 @@ import { RequestHandler } from "express";
 import createCabin from "../use-cases/cabin/createCabin";
 import { MongooseCabinRepository } from "../infrastructure/repositories/MongooseCabinRepository";
 import updateCabin from "../use-cases/cabin/updateCabin";
+import { getBookedDatesUseCase } from "../use-cases/cabin/getBookedDates";
+import { deleteCabin } from "../use-cases/cabin/deleteCabin";
 
 export const getCabinsController = async (req: Request, res: Response) => {
   const { start, end, guests, rooms } = req.query;
@@ -22,12 +24,14 @@ export const getCabinsController = async (req: Request, res: Response) => {
   }
 };
 
-
 type CabinParams = {
   _id: string;
-}
+};
 
-export const cabinDetailController: RequestHandler<{ _id: string }> = async (req, res) => {
+export const cabinDetailController: RequestHandler<{ _id: string }> = async (
+  req,
+  res
+) => {
   //console.log("➡️ Entrando a cabinDetailController");
 
   const { _id } = req.params;
@@ -47,7 +51,6 @@ export const cabinDetailController: RequestHandler<{ _id: string }> = async (req
   }
 };
 
-
 const cabinRepo = new MongooseCabinRepository();
 
 export const createCabinController = async (req: Request, res: Response) => {
@@ -63,15 +66,16 @@ export const createCabinController = async (req: Request, res: Response) => {
   }
 };
 
-
-
-export const updateCabinController = async (req: Request, res: Response): Promise<void> => {
+export const updateCabinController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { id } = req.params;
     const cabinData = req.body;
 
     console.log("🧾 Datos recibidos para editar:", cabinData);
-    
+
     console.log("🖼 Archivos recibidos:", req.files);
 
     const useCase = updateCabin(cabinRepo);
@@ -86,5 +90,32 @@ export const updateCabinController = async (req: Request, res: Response): Promis
   } catch (error: any) {
     console.error("❌ Error en updateCabinController:", error.message);
     res.status(500).json({ message: "Error al actualizar la cabaña" });
+  }
+};
+
+export const getBookedDates = async (req: Request, res: Response) => {
+  try {
+    const cabinId = req.params.id;
+    const bookedDates = await getBookedDatesUseCase(cabinId);
+    res.json(bookedDates);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(404).json({ message: error.message });
+    } else {
+      res.status(404).json({ message: "Cabin not found" });
+    }
+  }
+};
+
+const cabinRepository = new MongooseCabinRepository();
+
+export const deleteCabinController = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    await deleteCabin(id, cabinRepository);
+    res.status(200).json({ message: "Cabaña eliminada correctamente" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al eliminar la cabaña" });
   }
 };
