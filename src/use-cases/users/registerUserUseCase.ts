@@ -8,7 +8,7 @@ export const registerUserUseCase = async (
   data: RegisterData, // recibe los argumentos de req.body del controller
   userRepository: UserRepository // 👈 el repositorio se inyecta aquí y usa la interface (como si fuera un tipo de repositorio)
 ) => {
-  const { name, lastName, email, password, role } = data;
+  const { name, lastName, email, password, role, phone } = data;
 
   // Verificar si ya existe un usuario con ese email
   const existingUser = await userRepository.findByEmail(email);
@@ -43,6 +43,7 @@ export const registerUserUseCase = async (
     passwordHash,
     role: role ?? 'client', // Si no viene, usa 'client'
     firebaseUid: firebaseUserId,
+    phone,
   };
 
   let savedUser: UserEntity;

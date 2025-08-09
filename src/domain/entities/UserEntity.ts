@@ -7,5 +7,6 @@ export interface UserEntity {
     passwordHash: string;
     role: string;
     firebaseUid: string;
+    phone: string;
   }
   
